@@ -1,0 +1,8 @@
+.pytest_chache
+tests/__pycache__
+tests/graphs/__pycache__
+app/__pycache__
+app/graphs/__pycache__
+resources/app_save
+venv
+config.yaml
