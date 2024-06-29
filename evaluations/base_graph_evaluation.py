@@ -1,10 +1,9 @@
 class BaseGraphEvaluation:
+    name = "BaseGraphEvaluation"
+
     def setup(self):
         # Common setup for all graphs, if any
         pass
-
-    def __name__(self):
-        return "BaseGraphEvaluation"
 
     def run_evaluation(self, test_func, *args, **kwargs):
         # Generic test execution logic
