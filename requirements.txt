@@ -6,3 +6,4 @@ langchain
 langchain-openai
 pyinputplus
 dotenv
+grandalf
