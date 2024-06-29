@@ -1,6 +1,12 @@
 import argparse
 from evaluations.base_graph_evaluation import BaseGraphEvaluation
 from evaluations.graphs.eval_generate_question import GenerateQuestionGraphEvaluation
+import datetime
+import yaml
+import sys
+import os
+
+config = yaml.safe_load(open("config.yaml"))
 
 evaluation_classes = [
     GenerateQuestionGraphEvaluation
@@ -41,9 +47,19 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    filename = f"{config['evaluations_path']}\{timestamp}.txt"
+
+    original_stdout = sys.stdout
+    os.makedirs(config["evaluations_path"], exist_ok=True)
+    sys.stdout = open(filename, "w", encoding="utf-8")
+
     if args.all:
         run_all_evaluations()
     elif args.graph:
         run_specific_evaluation(args.graph)
     else:
         print("No arguments provided. Use -a to run all evaluations or -g <GRAPH_NAME> to run specific evaluations.")
+
+    sys.stdout.close()
+    sys.stdout = original_stdout
