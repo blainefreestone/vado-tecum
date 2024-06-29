@@ -4,8 +4,12 @@ class BaseGraphEvaluation:
     name = "BaseGraphEvaluation"
 
     def setup(self):
-        # Common setup for all graphs, if any
-        pass
+        self.graph = self.get_graph()
+        self.graph.get_graph().print_ascii()
+        print("\n")
+
+    def get_graph(self):
+        raise NotImplementedError("Subclasses must implement get_graph method.")
 
     def run_evaluation(self, test_func, *args, **kwargs):
         print(f"Running {test_func.__name__}...")
