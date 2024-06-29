@@ -7,6 +7,7 @@ from langchain_core.messages.ai import AIMessage
 def state():
     return State({
         "passage": "This is a test passage.",
+        "target_grammar": "test grammar"
     })
 
 def test_chain():
@@ -18,7 +19,7 @@ def test_chain():
         })
         assert result == "This is a test question."
 
-def test_generate_question(state):
+def test_generate_question_node(state):
     # Test the generate_question function
     with patch('langchain_openai.ChatOpenAI.invoke', new=Mock()) as mock_invoke:
         mock_invoke.return_value = AIMessage(content="This is a test question.")
