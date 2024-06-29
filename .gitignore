@@ -6,5 +6,6 @@ app/graphs/__pycache__
 evaluations/__pycache__
 evaluations/graphs/__pycache__
 resources/app_save
+resources/evaluations
 venv
 config.yaml
