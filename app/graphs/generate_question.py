@@ -8,7 +8,7 @@ from langchain_core.prompts import ChatPromptTemplate
 system_question_prompt = "You are a Latin expert and you need to generate a question (in Latin) " \
 "based on a passage and an insight about the passage given by the user. " \
 
-system_insight_prompt = "You are a Latin expert and you need to generate an insight based " \
+system_insight_prompt = "You are a Latin expert and you need to generate an insight in Latin based " \
 "on the passage given by the user. " \
 "The insight should utilize the grammar concept given by the user. " \
 "The insight should not contain any information that is not in the passage."
