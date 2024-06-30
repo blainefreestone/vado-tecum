@@ -7,11 +7,14 @@ from langchain_core.prompts import ChatPromptTemplate
 
 system_question_prompt = "You are a Latin expert and you need to generate a question (in Latin) " \
 "based on a passage and an insight about the passage given by the user. " \
+"Do not generate any text before or after the question."
 
-system_insight_prompt = "You are a Latin expert and you need to generate an insight in Latin based " \
+system_insight_prompt = "You are a Latin expert and you need to generate an insight (completely in Latin) based " \
 "on the passage given by the user. " \
 "The insight should utilize the grammar concept given by the user. " \
-"The insight should not contain any information that is not in the passage."
+"The insight should not contain any information that is not in the passage. " \
+"The insight should be a complete sentence. " \
+"Do not generate any text before or after the insight."
 
 class State(TypedDict):
     passage: str
@@ -19,7 +22,7 @@ class State(TypedDict):
     generated_insight: str
     generated_question: str
 
-llm = ChatOpenAI()
+llm = ChatOpenAI(model="gpt-4o")
 
 question_prompt = ChatPromptTemplate.from_messages([
     ("system", system_question_prompt),
