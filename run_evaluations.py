@@ -1,6 +1,7 @@
 import argparse
 from evaluations.base_graph_evaluation import BaseGraphEvaluation
 from evaluations.graphs.eval_generate_question import GenerateQuestionGraphEvaluation
+from evaluations.graphs.eval_refine_answer import RefineAnswerGraphEvaluation
 import datetime
 import yaml
 import sys
@@ -9,7 +10,8 @@ import os
 config = yaml.safe_load(open("config.yaml"))
 
 evaluation_classes = [
-    GenerateQuestionGraphEvaluation
+    GenerateQuestionGraphEvaluation,
+    RefineAnswerGraphEvaluation
 ]
 
 def run_all_evaluations():
