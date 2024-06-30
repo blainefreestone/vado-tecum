@@ -1,11 +1,14 @@
 from evaluations.base_graph_evaluation import BaseGraphEvaluation
-from app.graphs.graphs import get_generate_question_graph
+from app.graphs.graphs import get_generate_question_graph, get_generate_question_prompts
 
 class GenerateQuestionGraphEvaluation(BaseGraphEvaluation):
     name = "GenerateQuestionGraphEvaluation"
 
     def get_graph(self):
         return get_generate_question_graph()
+    
+    def get_prompts(self):
+        return get_generate_question_prompts()
 
     def eval_reciprocal_pronouns(self):
         state = {
