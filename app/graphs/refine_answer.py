@@ -6,6 +6,7 @@ from langgraph.graph.message import add_messages
 from langchain_openai import ChatOpenAI
 from typing import Optional
 from langchain_core.pydantic_v1 import BaseModel, Field
+from typing import Literal
 
 system_grade_prompt = "You are a Latin expert and you need to grade a student's answer to a question. " \
 "The question is based on a passage and intends to test the student's understanding of the following passage and ability to utilize the target grammar concept. " \
@@ -18,6 +19,7 @@ class AnswerGrade(BaseModel):
     relevance: float = Field(..., ge=0, le=1, description="How relevant is the response to the question asked?")
     use_of_grammar_target: float = Field(..., ge=0, le=1, description="Does the answer try to use the target grammar concept?")
     correct_use_of_grammar_target: Optional[float] = Field(None, ge=0, le=1, description="Does the answer correctly use the target grammar concept? Should be None if the answer does not try to use the target grammar concept.")
+    fluency: float = Field(..., ge=0, le=1, description="How well-written is the answer? Does it make sense? Is it grammatically correct?")
 
 class State(TypedDict):
     passage: str
@@ -60,3 +62,37 @@ def grade_answer(state: State) -> State:
             'target_grammar': state['target_grammar']
         })
     }
+
+def refine_router(state: State) -> Literal[
+    "refine_correctness", "refine_relevance", 
+    "refine_use_of_grammar_target", 
+    "refine_correct_use_of_grammar_target", 
+    "refine_fluency",
+    "laud_answer"
+    ]:
+    grade = state['grade']
+    
+    # find the lowest score
+    lowest_score = min(
+        grade for grade in [
+            grade.correctness, 
+            grade.relevance, 
+            grade.use_of_grammar_target, 
+            grade.correct_use_of_grammar_target, 
+            grade.fluency
+        ] if grade is not None
+    )
+    # if the lowest score is greater than 0.7, the answer is good enough
+    if lowest_score >= 0.7:
+        return "laud_answer"
+    
+    if lowest_score == grade.correctness:
+        return "refine_correctness"
+    elif lowest_score == grade.relevance:
+        return "refine_relevance"
+    elif lowest_score == grade.use_of_grammar_target:
+        return "refine_use_of_grammar_target"
+    elif lowest_score == grade.correct_use_of_grammar_target:
+        return "refine_correct_use_of_grammar_target"
+    elif lowest_score == grade.fluency:
+        return "refine_fluency"
