@@ -14,9 +14,10 @@ system_grade_prompt = "You are a Latin expert and you need to grade a student's 
 "Target grammar concept: {target_grammar}\n\n" \
 
 class AnswerGrade(BaseModel):
-    correctness: float = Field(..., ge=0, le=1, description="If the information in the answer is supported by the passage (ignoring the question).")
-    relevance: float = Field(..., ge=0, le=1, description="If the response is relevant to the question asked.")
-    use_of_grammar_target: float = Field(..., ge=0, le=1, description="If the response correctly uses the target grammar concept.")
+    correctness: float = Field(..., ge=0, le=1, description="How correct is the information in the answer based on the passage?")
+    relevance: float = Field(..., ge=0, le=1, description="How relevant is the response to the question asked?")
+    use_of_grammar_target: float = Field(..., ge=0, le=1, description="Does the answer try to use the target grammar concept?")
+    correct_use_of_grammar_target: Optional[float] = Field(None, ge=0, le=1, description="Does the answer correctly use the target grammar concept? Should be None if the answer does not try to use the target grammar concept.")
 
 class State(TypedDict):
     passage: str
