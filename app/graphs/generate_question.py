@@ -33,6 +33,12 @@ insight_prompt = ChatPromptTemplate.from_messages([
 ])
 insight_chain = insight_prompt | llm | StrOutputParser()
 
+def get_prompts():
+    return {
+        'generate_question': question_prompt,
+        'generate_insight': insight_prompt
+    }
+
 def get_graph():
     graph_builder = StateGraph(State)
     graph_builder.add_node("generate_question", generate_question)
