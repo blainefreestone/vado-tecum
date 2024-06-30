@@ -64,6 +64,11 @@ def get_graph():
 
     graph_builder.add_node("grade_answer", grade_answer)
     graph_builder.add_node("laud_answer", laud_answer)
+    graph_builder.add_node("refine_correctness", refine_correctness)
+    graph_builder.add_node("refine_relevance", refine_relevance)
+    graph_builder.add_node("refine_use_of_grammar_target", refine_use_of_grammar_target)
+    graph_builder.add_node("refine_correct_use_of_grammar_target", refine_correct_use_of_grammar_target)
+    graph_builder.add_node("refine_fluency", refine_fluency)
 
     graph_builder.set_entry_point("grade_answer")
 
@@ -126,3 +131,18 @@ def laud_answer(state: State) -> State:
         "passage": state["passage"],
         "target_grammar": state["target_grammar"]
     })}
+
+def refine_correctness(state: State) -> State:
+    return state
+
+def refine_relevance(state: State) -> State:
+    return state
+
+def refine_use_of_grammar_target(state: State) -> State:
+    return state
+
+def refine_correct_use_of_grammar_target(state: State) -> State:
+    return state
+
+def refine_fluency(state: State) -> State:
+    return state
