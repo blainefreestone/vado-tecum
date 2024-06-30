@@ -4,6 +4,7 @@ pytest
 langgraph
 langchain
 langchain-openai
+langchain-community
 pyinputplus
 dotenv
 grandalf
