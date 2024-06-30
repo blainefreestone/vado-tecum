@@ -5,6 +5,7 @@ langgraph
 langchain
 langchain-openai
 langchain-community
+langchain-anthropic
 pyinputplus
 dotenv
 grandalf
