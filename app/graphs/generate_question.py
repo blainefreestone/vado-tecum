@@ -2,8 +2,10 @@ from typing import Annotated
 from typing_extensions import TypedDict
 from langgraph.graph import StateGraph
 from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.output_parsers.string import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+import yaml
 
 system_question_prompt = "You are a Latin expert and you need to generate a question (in Latin) " \
 "based on a passage and an insight about the passage given by the user. " \
@@ -22,7 +24,20 @@ class State(TypedDict):
     generated_insight: str
     generated_question: str
 
-llm = ChatOpenAI(model="gpt-4o")
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+    llm_provider = config['llm_provider']
+    openai_api_key = config['openai_api_key']
+    openai_model = config['openai_model']
+    anthropic_api_key = config['anthropic_api_key']
+    anthropic_model = config['anthropic_model']
+
+if llm_provider == "openai":
+    llm = ChatOpenAI(model_name=openai_model, api_key=openai_api_key)
+elif llm_provider == "anthropic":
+    llm = ChatAnthropic(model_name=anthropic_model, api_key=anthropic_api_key)
+else:
+    raise ValueError("Invalid LLM provider in config.yaml")
 
 question_prompt = ChatPromptTemplate.from_messages([
     ("system", system_question_prompt),

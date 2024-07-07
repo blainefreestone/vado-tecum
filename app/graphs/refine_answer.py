@@ -5,9 +5,11 @@ from langchain_core.output_parsers.string import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langgraph.graph.message import add_messages
 from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from typing import Optional
 from langchain_core.pydantic_v1 import BaseModel, Field
 from typing import Literal
+import yaml
 
 system_grade_prompt = "You are a Latin expert and you need to grade a student's answer to a question. " \
 "The question is based on a passage and intends to test the student's understanding of the following passage and ability to utilize the target grammar concept. " \
@@ -20,7 +22,15 @@ system_laud_answer_prompt = "You are a helpful Latin teacher and you need to pro
 "Passage: {passage}\n\n" \
 "Target grammar concept: {target_grammar}\n\n" \
 "The student will give you a good answer. "
-"Laud the student's answer and ability, and provide constructive feedback (all in Latin). " \
+"Laud the student's answer and ability, and provide constructive feedback. " \
+"Always respond in Latin. " \
+
+system_refine_prompt = "You are a Latin teacher and you need to give a student feedback on his answer's {refine_type}. " \
+"The answer is based on a passage and a question." \
+"Always respond in Latin. " \
+"Only respond with the feedback, do not rewrite the answer for the student, that is their responsibility. " \
+"Question: {generated_question}\n\n" \
+"Passage: {passage}\n\n" \
 
 class AnswerGrade(BaseModel):
     correctness: float = Field(..., ge=0, le=1, description="How correct is the information in the answer based on the passage?")
@@ -34,10 +44,24 @@ class State(TypedDict):
     target_grammar: str
     generated_question: str
     answer: str
-    # messages: Annotated[list, add_messages]
     grade: AnswerGrade
+    comment: str
 
-llm = ChatOpenAI(model="gpt-4o")
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+    llm_provider = config['llm_provider']
+    openai_api_key = config['openai_api_key']
+    openai_model = config['openai_model']
+    anthropic_api_key = config['anthropic_api_key']
+    anthropic_model = config['anthropic_model']
+
+if llm_provider == "openai":
+    llm = ChatOpenAI(model_name=openai_model, api_key=openai_api_key)
+elif llm_provider == "anthropic":
+    llm = ChatAnthropic(model_name=anthropic_model, api_key=anthropic_api_key)
+else:
+    raise ValueError("Invalid LLM provider in config.yaml")
+
 structured_llm = llm.with_structured_output(AnswerGrade)
 
 grade_prompt = ChatPromptTemplate.from_messages([
@@ -54,9 +78,18 @@ laud_answer_prompt = ChatPromptTemplate.from_messages([
 
 laud_answer_chain = laud_answer_prompt | llm | StrOutputParser()
 
+refine_prompt = ChatPromptTemplate.from_messages([
+    ("system", system_refine_prompt),
+    ("user", "Answer:\n\n{answer}")
+])
+
+refine_chain = refine_prompt | llm | StrOutputParser()
+
 def get_prompts():
     return {
-        'grade': grade_prompt
+        'grade': grade_prompt,
+        'laud_answer': laud_answer_prompt,
+        'refine': refine_prompt
     }
 
 def get_graph():
@@ -133,16 +166,41 @@ def laud_answer(state: State) -> State:
     })}
 
 def refine_correctness(state: State) -> State:
-    return state
+    return {"comment": refine_chain.invoke({
+        "answer": state["answer"],
+        "generated_question": state["generated_question"],
+        "passage": state["passage"],
+        "refine_type": "correctness"   
+    })}
 
 def refine_relevance(state: State) -> State:
-    return state
+    return {"comment": refine_chain.invoke({
+        "answer": state["answer"],
+        "generated_question": state["generated_question"],
+        "passage": state["passage"],
+        "refine_type": "relevance"   
+    })}
 
 def refine_use_of_grammar_target(state: State) -> State:
-    return state
+    return {"comment": refine_chain.invoke({
+        "answer": state["answer"],
+        "generated_question": state["generated_question"],
+        "passage": state["passage"],
+        "refine_type": f"use of grammar target: {state['target_grammar']}"   
+    })}
 
 def refine_correct_use_of_grammar_target(state: State) -> State:
-    return state
+    return {"comment": refine_chain.invoke({
+        "answer": state["answer"],
+        "generated_question": state["generated_question"],
+        "passage": state["passage"],
+        "refine_type": f"correct use of grammar target: {state['target_grammar']}"   
+    })}
 
 def refine_fluency(state: State) -> State:
-    return state
+    return {"comment": refine_chain.invoke({
+        "answer": state["answer"],
+        "generated_question": state["generated_question"],
+        "passage": state["passage"],
+        "refine_type": "fluency"   
+    })}
