@@ -2,6 +2,7 @@
 
 from . import generate_question
 from . import refine_answer
+from . import refine_answer_relevance
 
 def get_generate_question_graph():
     return generate_question.get_graph()
@@ -14,3 +15,9 @@ def get_refine_answer_graph():
 
 def get_refine_answer_prompts():
     return refine_answer.get_prompts()
+
+def get_refine_answer_relevance_graph():
+    return refine_answer_relevance.get_graph()
+
+def get_refine_answer_relevance_prompts():
+    return refine_answer_relevance.get_prompts()
