@@ -3,6 +3,7 @@ from evaluations.base_graph_evaluation import BaseGraphEvaluation
 from evaluations.graphs.eval_generate_question import GenerateQuestionGraphEvaluation
 from evaluations.graphs.eval_refine_answer import RefineAnswerGraphEvaluation
 from evaluations.graphs.eval_refine_answer_relevance import RefineAnswerRelevanceGraphEvaluation
+from evaluations.graphs.eval_refine_answer_correctness import RefineAnswerCorrectnessGraphEvaluation
 import datetime
 import yaml
 import sys
@@ -13,7 +14,8 @@ config = yaml.safe_load(open("config.yaml"))
 evaluation_classes = [
     GenerateQuestionGraphEvaluation,
     RefineAnswerGraphEvaluation,
-    RefineAnswerRelevanceGraphEvaluation
+    RefineAnswerRelevanceGraphEvaluation,
+    RefineAnswerCorrectnessGraphEvaluation,
 ]
 
 def run_all_evaluations():
