@@ -60,6 +60,12 @@ if __name__ == "__main__":
     os.makedirs(config["evaluations_path"], exist_ok=True)
     sys.stdout = open(filename, "w", encoding="utf-8")
 
+    if config["llm_provider"] == "openai":
+        model_name = config["openai_model"]
+    elif config["llm_provider"] == "anthropic":
+        model_name = config["anthropic_model"]
+    print(f"Model: {model_name}\n")
+
     if args.all:
         run_all_evaluations()
     elif args.graph:
