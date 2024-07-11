@@ -4,6 +4,27 @@ import os
 import pickle
 from typing import Dict, Any, List
 
+# Define the keys that we want to keep from the JSON data
+def extract_keys(data, keys):
+    result = {}
+    for key, subkeys in keys.items():
+        if key in data:
+            if isinstance(data[key], dict):
+                result[key] = extract_keys(data[key], subkeys)
+            elif isinstance(data[key], list) and isinstance(subkeys, dict):
+                result[key] = [extract_keys(item, subkeys) for item in data[key] if isinstance(item, dict)]
+            else:
+                result[key] = data[key]
+    return result
+
+keys = {
+    "word": None,
+    "senses": {
+        "glosses": None,
+    },
+    "pos": None,
+}
+
 class JSONLIndexer:
     def __init__(self, file_path: str):
         self.file_path = file_path
@@ -50,5 +71,6 @@ class JSONLSearcher:
             for position in positions:
                 mm.seek(position)
                 line = mm.readline()
-                results.append(json.loads(line))
+                loaded_line = json.loads(line)
+                results.append(extract_keys(loaded_line, keys))
         return results
