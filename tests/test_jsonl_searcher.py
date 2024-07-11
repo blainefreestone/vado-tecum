@@ -8,10 +8,10 @@ from app.jsonl_searcher import JSONLIndexer, JSONLSearcher
 def temp_jsonl_file(tmp_path):
     file_path = tmp_path / "test.jsonl"
     data = [
-        {"word": "apple", "definition": "A fruit"},
-        {"word": "banana", "definition": "Another fruit"},
-        {"word": "cherry", "definition": "Yet another fruit"},
-        {"word": "apple", "definition": "A tech company"}
+        {"word": "apple", "senses": "A fruit"},
+        {"word": "banana", "senses": "Another fruit"},
+        {"word": "cherry", "senses": "Yet another fruit"},
+        {"word": "apple", "senses": "A tech company"}
     ]
     with open(file_path, 'w', encoding='utf-8') as f:
         for entry in data:
@@ -47,21 +47,21 @@ def test_search(temp_jsonl_file):
     assert isinstance(result, list), "Search should return a list"
     assert len(result) == 2, "Search should return two results for 'apple'"
     assert result[0]["word"] == "apple", "First result should contain the word 'apple'"
-    assert result[0]["definition"] == "A fruit", "First result should contain the correct definition for 'apple'"
+    assert result[0]["senses"] == "A fruit", "First result should contain the correct senses for 'apple'"
     assert result[1]["word"] == "apple", "Second result should contain the word 'apple'"
-    assert result[1]["definition"] == "A tech company", "Second result should contain the correct definition for 'apple'"
+    assert result[1]["senses"] == "A tech company", "Second result should contain the correct senses for 'apple'"
     
     result = searcher.search("banana")
     assert isinstance(result, list), "Search should return a list"
     assert len(result) == 1, "Search should return one result for 'banana'"
     assert result[0]["word"] == "banana", "Result should contain the word 'banana'"
-    assert result[0]["definition"] == "Another fruit", "Result should contain the correct definition for 'banana'"
+    assert result[0]["senses"] == "Another fruit", "Result should contain the correct senses for 'banana'"
     
     result = searcher.search("cherry")
     assert isinstance(result, list), "Search should return a list"
     assert len(result) == 1, "Search should return one result for 'cherry'"
     assert result[0]["word"] == "cherry", "Result should contain the word 'cherry'"
-    assert result[0]["definition"] == "Yet another fruit", "Result should contain the correct definition for 'cherry'"
+    assert result[0]["senses"] == "Yet another fruit", "Result should contain the correct senses for 'cherry'"
     
     result = searcher.search("durian")
     assert result == [], "Search should return an empty list for a word not in the index"
