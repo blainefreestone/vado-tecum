@@ -4,27 +4,6 @@ import os
 import pickle
 from typing import Dict, Any, List
 
-# Define the keys that we want to keep from the JSON data
-def extract_keys(data, keys):
-    result = {}
-    for key, subkeys in keys.items():
-        if key in data:
-            if isinstance(data[key], dict):
-                result[key] = extract_keys(data[key], subkeys)
-            elif isinstance(data[key], list) and isinstance(subkeys, dict):
-                result[key] = [extract_keys(item, subkeys) for item in data[key] if isinstance(item, dict)]
-            else:
-                result[key] = data[key]
-    return result
-
-keys = {
-    "word": None,
-    "senses": {
-        "glosses": None,
-    },
-    "pos": None,
-}
-
 class JSONLIndexer:
     def __init__(self, file_path: str):
         self.file_path = file_path
@@ -60,17 +39,41 @@ class JSONLSearcher:
             self.indexer.create_index()
         self.index = self.indexer.load_index()
 
-    def search(self, word: str) -> List[Dict[str, Any]]:
+    def get_word_info(self, word: str) -> List[Dict[str, Any]]:
         positions = self.index.get(word)
         if positions is None:
             return []
         
         results = []
-        with open(self.file_path, 'rb') as f:
-            mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        with open(self.file_path, 'rb') as file:
+            mm = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
             for position in positions:
                 mm.seek(position)
                 line = mm.readline()
                 loaded_line = json.loads(line)
-                results.append(extract_keys(loaded_line, keys))
-        return results
+                results.append(loaded_line)
+
+        word_info_list = []
+
+        # extract word information
+        for result in results:
+            # extract basic information
+            result_word = result.get('word', 'Unknown')
+            result_pos = result.get('pos', 'Unknown')
+            
+            # extract glosses and form of words from the senses
+            senses = result.get('senses', [])
+            glosses = []
+            form_of_words = []
+            for sense in senses:
+                glosses.extend(sense.get('glosses', []))
+                form_of_words.extend([form.get('word') for form in sense.get('form_of', [])])
+
+            word_info_list.append({
+                "word": result_word,
+                "pos": result_pos,
+                "glosses": glosses,
+                "form_of_words": form_of_words
+            })
+        
+        return word_info_list
