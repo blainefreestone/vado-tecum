@@ -48,8 +48,43 @@ def test_get_word_info():
     searcher = JSONLSearcher('tests/word_objects.jsonl')
     
     result = searcher.get_word_info("inpleremus")
-    assert result is not None, "Search result should not be None"
-    assert result["word"] == "inpleremus", "Search result should have the word 'inpleremus'"
-    assert result["pos"] == "verb", "Search result should have the pos 'verb'"
-    assert result["glosses"] == ["first-person plural imperfect active subjunctive of inpleō"]
-    assert result["form_of_words"] == ["inpleō"]
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "inpleremus", "Search result should have the word 'inpleremus'"
+    assert result[0]["pos"] == "verb", "Search result should have the pos 'verb'"
+    assert result[0]["glosses"] == ["first-person plural imperfect active subjunctive of inpleō"], "Search result should have the gloss 'first-person plural imperfect active subjunctive of inpleō'"
+    assert result[0]["form_of_words"] == ["inpleō"], "Search result should have the form of word 'inpleō'"
+
+    result = searcher.get_word_info("circumnavigaratis")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "circumnavigaratis", "Search result should have the word 'circumnavigaratis'"
+    assert result[0]["pos"] == "verb", "Search result should have the pos 'verb'"
+    assert result[0]["glosses"] == ["second-person plural pluperfect active indicative of circumnāvigō"], "Search result should have the gloss 'second-person plural pluperfect active indicative of circumnāvigō'"
+    assert result[0]["form_of_words"] == ["circumnāvigō"], "Search result should have the form of word 'circumnāvigō'"
+
+    result = searcher.get_word_info("providentius")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "providentius", "Search result should have the word 'providentius'"
+    assert result[0]["pos"] == "adv", "Search result should have the pos 'adv'"
+    assert result[0]["glosses"] == ["comparative degree of prōvidenter"], "Search result should have the gloss 'comparative degree of prōvidenter'"
+    assert result[0]["form_of_words"] == ["prōvidenter"], "Search result should have the form of word 'prōvidenter'"
+
+    result = searcher.get_word_info("clarissime")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "clarissime", "Search result should have the word 'clarissime'"
+    assert result[0]["pos"] == "adv", "Search result should have the pos 'adv'"
+    assert result[0]["glosses"] == ["superlative degree of clārē: most clearly"], "Search result should have the gloss 'superlative degree of clārē: most clearly'"
+    assert result[0]["form_of_words"] == ["clārē"], "Search result should have the form of word 'clārē'"
+
+    result = searcher.get_word_info("multiflorus")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "multiflorus", "Search result should have the word 'multiflorus'"
+    assert result[0]["pos"] == "adj", "Search result should have the pos 'adj'"
+    assert result[0]["glosses"] == ["having many-flowers"], "Search result should have the gloss 'having many-flowers'"
+    assert result[0]["form_of_words"] == [], "Search result should have an empty list for form_of_words"
+
+    result = searcher.get_word_info("tranquillus")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "tranquillus", "Search result should have the word 'tranquillus'"
+    assert result[0]["pos"] == "adj", "Search result should have the pos 'adj'"
+    assert result[0]["glosses"] == ["quiet, calm, still, tranquil", "placid, composed, untroubled, undisturbed"], "Search result should have the glosses 'quiet, calm, still, tranquil' and 'placid, composed, untroubled, undisturbed'"
+    assert result[0]["form_of_words"] == [], "Search result should not have 'form_of_words'"
