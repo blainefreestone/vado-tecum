@@ -4,6 +4,11 @@ import json
 import pickle
 from app.jsonl_searcher import JSONLIndexer, JSONLSearcher
 
+'''
+TODO: Randomly select 10 or so words from the JSONL file and write tests to check if the search method returns the correct results for those words.
+TODO: Decide exactly how I want the search result to be formatted. Should it retain its format or should I extract the data and create a new structure?
+'''
+
 @pytest.fixture
 def temp_jsonl_file(tmp_path):
     file_path = tmp_path / "test.jsonl"
@@ -39,26 +44,12 @@ def test_load_index(temp_jsonl_file):
     assert "abdicative" in index, "Index should contain 'abdicative'"
     assert "abnodate" in index, "Index should contain 'abnodate'"
 
-def test_search(temp_jsonl_file):
-    searcher = JSONLSearcher(temp_jsonl_file)
+def test_get_word_info():
+    searcher = JSONLSearcher('tests/word_objects.jsonl')
     
-    result = searcher.search("abacinate")
-    assert isinstance(result, list), "Search should return a list"
-    assert len(result) == 1, "Search should return two results for 'abacinate'"
-    assert result[0]["word"] == "abacinate", "First result should contain the word 'abacinate'"
-    assert result[0]["senses"][0]["glosses"] == ["second-person plural present active imperative of abacinō"], "First result should contain the correct senses for 'abacinate'"
-
-    result = searcher.search("abdicative")
-    assert isinstance(result, list), "Search should return a list"
-    assert len(result) == 1, "Search should return one result for 'abdicative'"
-    assert result[0]["word"] == "abdicative", "Result should contain the word 'abdicative'"
-    assert result[0]["senses"][0]["glosses"] == ["negatively"], "Result should contain the correct senses for 'abdicative'"
-    
-    result = searcher.search("abnodate")
-    assert isinstance(result, list), "Search should return a list"
-    assert len(result) == 1, "Search should return one result for 'abnodate'"
-    assert result[0]["word"] == "abnodate", "Result should contain the word 'abnodate'"
-    assert result[0]["senses"][0]["glosses"] == ["second-person plural present active imperative of abnōdō"], "Result should contain the correct senses for 'abnodate'"
-    
-    result = searcher.search("amo")
-    assert result == [], "Search should return an empty list for a word not in the index"
+    result = searcher.get_word_info("inpleremus")
+    assert result is not None, "Search result should not be None"
+    assert result["word"] == "inpleremus", "Search result should have the word 'inpleremus'"
+    assert result["pos"] == "verb", "Search result should have the pos 'verb'"
+    assert result["glosses"] == ["first-person plural imperfect active subjunctive of inpleō"]
+    assert result["form_of_words"] == ["inpleō"]
