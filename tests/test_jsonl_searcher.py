@@ -88,3 +88,45 @@ def test_get_word_info():
     assert result[0]["pos"] == "adj", "Search result should have the pos 'adj'"
     assert result[0]["glosses"] == ["quiet, calm, still, tranquil", "placid, composed, untroubled, undisturbed"], "Search result should have the glosses 'quiet, calm, still, tranquil' and 'placid, composed, untroubled, undisturbed'"
     assert result[0]["form_of_words"] == [], "Search result should not have 'form_of_words'"
+
+    result = searcher.get_word_info("veretrorum")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "veretrorum", "Search result should have the word 'veretrorum'"
+    assert result[0]["pos"] == "noun", "Search result should have the pos 'noun'"
+    assert result[0]["glosses"] == ["genitive plural of verētrum"], "Search result should have the gloss 'genitive plural of verētrum'"
+    assert result[0]["form_of_words"] == ["verētrum"], "Search result should have the form of word 'verētrum'"
+
+    result = searcher.get_word_info("divum")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "divum", "Search result should have the word 'divum'"
+    assert result[0]["pos"] == "noun", "Search result should have the pos 'noun'"
+    assert result[0]["glosses"] == ["sky", "open air"], "Search result should have the glosses 'sky' and 'open air'"
+    assert result[0]["form_of_words"] == [], "Search result should have an empty list for form_of_words"
+
+    result = searcher.get_word_info("quadru-")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "quadru-", "Search result should have the word 'quadru-'"
+    assert result[0]["pos"] == "prefix", "Search result should have the pos 'prefix'"
+    assert result[0]["glosses"] == ["Alternative form of quadri-"], "Search result should have the gloss 'Alternative form of quadri-'"
+    assert result[0]["form_of_words"] == [], "Search result should have the form of word 'quadri-'"
+
+    result = searcher.get_word_info("ante-")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "ante-", "Search result should have the word 'ante-'"
+    assert result[0]["pos"] == "prefix", "Search result should have the pos 'prefix'"
+    assert result[0]["glosses"] == ["before"], "Search result should have the gloss 'before'"
+    assert result[0]["form_of_words"] == [], "Search result should have an empty list for form_of_words"
+
+    result = searcher.get_word_info("Jugurtha")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "Jugurtha", "Search result should have the word 'Jugurtha'"
+    assert result[0]["pos"] == "name", "Search result should have the pos 'name'"
+    assert result[0]["glosses"] == ["A king of Numidia who made war on Rome"], "Search result should have the gloss 'A king of Numidia who made war on Rome'"
+    assert result[0]["form_of_words"] == [], "Search result should not have 'form_of_words'"
+
+    result = searcher.get_word_info("Lethonem")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "Lethonem", "Search result should have the word 'Lethonem'"
+    assert result[0]["pos"] == "name", "Search result should have the pos 'name'"
+    assert result[0]["glosses"] == ["accusative singular of Lēthōn"], "Search result should have the gloss 'accusative singular of Lēthōn'"
+    assert result[0]["form_of_words"] == ["Lēthōn"], "Search result should have the form of word 'Lēthōn'"
