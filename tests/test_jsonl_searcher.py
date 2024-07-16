@@ -130,3 +130,17 @@ def test_get_word_info():
     assert result[0]["pos"] == "name", "Search result should have the pos 'name'"
     assert result[0]["glosses"] == ["accusative singular of Lēthōn"], "Search result should have the gloss 'accusative singular of Lēthōn'"
     assert result[0]["form_of_words"] == ["Lēthōn"], "Search result should have the form of word 'Lēthōn'"
+
+    result = searcher.get_word_info("attat")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "attat", "Search result should have the word 'attat'"
+    assert result[0]["pos"] == "intj", "Search result should have the pos 'intj'"
+    assert result[0]["glosses"] == ["An expression of sudden enlightenment, surprise or painful realisation aha, hey, oh no!", "Said in sudden warning."], "Search result should have the correct glosses"
+    assert result[0]["form_of_words"] == [], "Search result should have an empty list for form_of_words"
+
+    result = searcher.get_word_info("fi")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0]["word"] == "fi", "Search result should have the word 'fi'"
+    assert result[0]["pos"] == "intj", "Search result should have the pos 'intj'"
+    assert result[0]["glosses"] == ["pah!, pooh!, foh!, bah!, an expression of disgust"], "Search result should have the gloss 'pah!, pooh!, foh!, bah!, an expression of disgust'"
+    assert result[0]["form_of_words"] == [], "Search result should have an empty list for form_of_words"
