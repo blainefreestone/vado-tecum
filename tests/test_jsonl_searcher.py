@@ -2,7 +2,7 @@ import pytest
 import os
 import json
 import pickle
-from app.jsonl_searcher import JSONLIndexer, JSONLSearcher
+from app.jsonl_searcher import JSONLIndexer, JSONLSearcher, remove_diacritics
 
 '''
 TODO: Randomly select 10 or so words from the JSONL file and write tests to check if the search method returns the correct results for those words.
@@ -45,7 +45,7 @@ def test_load_index(temp_jsonl_file):
     assert "abnodate" in index, "Index should contain 'abnodate'"
 
 def test_get_word_info():
-    searcher = JSONLSearcher('tests/word_objects.jsonl')
+    searcher = JSONLSearcher('tests\\word_objects.jsonl')
     
     result = searcher.get_word_info("inpleremus")
     assert len(result) == 1, "Search result should have 1 entry"
@@ -144,3 +144,24 @@ def test_get_word_info():
     assert result[0]["pos"] == "intj", "Search result should have the pos 'intj'"
     assert result[0]["glosses"] == ["pah!, pooh!, foh!, bah!, an expression of disgust"], "Search result should have the gloss 'pah!, pooh!, foh!, bah!, an expression of disgust'"
     assert result[0]["form_of_words"] == [], "Search result should have an empty list for form_of_words"
+
+def test_get_root_words_info():
+    searcher = JSONLSearcher('resources\\latin-wiktionary.jsonl')
+    
+    result = searcher.get_root_words_info("inpleremus")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0][0]["word"] == remove_diacritics("inpleō"), "Search result should have the word 'inpleō'"
+    assert result[0][0]["pos"] == "verb", "Search result should have the pos 'verb'"
+    assert result[0][0]["form_of_words"] == [], "Search result should not have 'form_of_words'"
+
+    result = searcher.get_root_words_info("circumnavigaratis")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0][0]["word"] == remove_diacritics("circumnāvigō"), "Search result should have the word 'circumnāvigō'"
+    assert result[0][0]["pos"] == "verb", "Search result should have the pos 'verb'"
+    assert result[0][0]["form_of_words"] == [], "Search result should not have 'form_of_words'"
+
+    result = searcher.get_root_words_info("providentius")
+    assert len(result) == 1, "Search result should have 1 entry"
+    assert result[0][0]["word"] == remove_diacritics("prōvidenter"), "Search result should have the word 'prōvidenter'"
+    assert result[0][0]["pos"] == "adv", "Search result should have the pos 'adv'"
+    assert result[0][0]["form_of_words"] == [], "Search result should not have 'form_of_words'"
