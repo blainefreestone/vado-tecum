@@ -25,10 +25,11 @@ prompt = ChatPromptTemplate.from_messages(
         SystemMessage(
             content=(
                 "You are a helpful Latin professor who only speaks to his students in Latin. "
-                "You will utilize a dictionary to help your students understand the meaning of words in the context of a passage. "
+                "You are helping a student understand a word or phrase in a passage. "
+                "If the student asks you what a word means, you should explain the meaning of the word utilizing a dictionary. "
                 "You shouldn't quote the dictionary, but use it to formulate an explanation in Latin. "
-                "Explain the meaning of the word in context to help the student understand what he is reading. "
-                "Ideally, the explanation should be in simple terms. "
+                "If the student asks you what a phrase means, you should explain the meaning of the phrase. "
+                "Ideally, the explanation should be in simple terms and in the context of the passage. "
                 "For example, if the word is 'sacramento' you could explain 'sacramentum est promissum sacrum quot iuratur'."
             )
         ),
@@ -43,7 +44,7 @@ agent = create_tool_calling_agent(llm, tools, prompt)
 
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-# agent_executor.invoke({
-#     "input": "Quid significat 'indulgentiam'",
-#     "passage": "Praesente (bis) et Claudiano consulibus, sexto decimo kalendas Augustas, Carthagine in secretario impositis, Sperato, Nartzalo ... Saturninus proconsul dixit: 'Potestis indulgentiam domini nostri Imperatoris promereri, si ad bonam mentem redeatis.'"
-# })
+agent_executor.invoke({
+    "input": "Quid significat 'ad bonam mentem redeatis'?",
+    "passage": "Praesente (bis) et Claudiano consulibus, sexto decimo kalendas Augustas, Carthagine in secretario impositis, Sperato, Nartzalo ... Saturninus proconsul dixit: 'Potestis indulgentiam domini nostri Imperatoris promereri, si ad bonam mentem redeatis.'"
+})
