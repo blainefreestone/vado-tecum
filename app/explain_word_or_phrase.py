@@ -16,7 +16,7 @@ def get_root_words_info(word: str) -> list[list[dict]]:
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_tool_calling_agent, AgentExecutor
 from langchain_core.messages import SystemMessage
-from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplate, MessagesPlaceholder, SystemMessagePromptTemplate
+from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplate, MessagesPlaceholder
 
 tools = [get_root_words_info]
 
@@ -44,7 +44,7 @@ agent = create_tool_calling_agent(llm, tools, prompt)
 
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-agent_executor.invoke({
-    "input": "Quid significat 'ad bonam mentem redeatis'?",
-    "passage": "Praesente (bis) et Claudiano consulibus, sexto decimo kalendas Augustas, Carthagine in secretario impositis, Sperato, Nartzalo ... Saturninus proconsul dixit: 'Potestis indulgentiam domini nostri Imperatoris promereri, si ad bonam mentem redeatis.'"
-})
+# agent_executor.invoke({
+#     "input": "Quid significat 'ad bonam mentem redeatis'?",
+#     "passage": "Praesente (bis) et Claudiano consulibus, sexto decimo kalendas Augustas, Carthagine in secretario impositis, Sperato, Nartzalo ... Saturninus proconsul dixit: 'Potestis indulgentiam domini nostri Imperatoris promereri, si ad bonam mentem redeatis.'"
+# })
