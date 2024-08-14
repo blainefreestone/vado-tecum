@@ -1,4 +1,4 @@
-from app.app import App
+from src.app import App
 import yaml
 
 config = yaml.safe_load(open("config.yaml"))

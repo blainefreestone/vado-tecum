@@ -42,7 +42,9 @@ llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 agent = create_tool_calling_agent(llm, tools, prompt)
 
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+agent_executor = AgentExecutor(agent=agent, tools=tools)
+
+### Rough test cases
 
 # agent_executor.invoke({
 #     "input": "Quid significat 'ad bonam mentem redeatis'?",

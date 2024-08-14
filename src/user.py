@@ -1,5 +1,5 @@
-from app.text import Text
-from app.user_text import UserText
+from src.text import Text
+from src.user_text import UserText
 
 class User:
     """

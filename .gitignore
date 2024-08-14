@@ -1,10 +1,5 @@
 .pytest_chache
-tests/__pycache__
-tests/graphs/__pycache__
-app/__pycache__
-app/graphs/__pycache__
-evaluations/__pycache__
-evaluations/graphs/__pycache__
+__pycache__
 resources/app_save
 resources/evaluations
 venv

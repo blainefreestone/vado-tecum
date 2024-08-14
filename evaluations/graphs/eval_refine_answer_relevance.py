@@ -1,5 +1,5 @@
 from evaluations.base_graph_evaluation import BaseGraphEvaluation
-from app.graphs.graphs import get_refine_answer_relevance_graph, get_refine_answer_relevance_prompts
+from src.graphs.graphs import get_refine_answer_relevance_graph, get_refine_answer_relevance_prompts
 
 class RefineAnswerRelevanceGraphEvaluation(BaseGraphEvaluation):
     name = "RefineAnswerRelevanceGraphEvaluation"

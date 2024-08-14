@@ -1,7 +1,7 @@
 import pytest
-from app.user import User
-from app.text import Text
-from app.user_text import UserText
+from src.user import User
+from src.text import Text
+from src.user_text import UserText
 
 @pytest.fixture
 def user():

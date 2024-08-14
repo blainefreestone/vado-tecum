@@ -1,5 +1,5 @@
 from evaluations.base_graph_evaluation import BaseGraphEvaluation
-from app.graphs.graphs import get_refine_answer_correctness_graph, get_generate_question_prompts
+from src.graphs.graphs import get_refine_answer_correctness_graph, get_generate_question_prompts
 
 class RefineAnswerCorrectnessGraphEvaluation(BaseGraphEvaluation):
     name = "RefineAnswerCorrectnessGraphEvaluation"

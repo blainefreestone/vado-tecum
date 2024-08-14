@@ -26,6 +26,8 @@ llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
 
 chain = prompt | llm | StrOutputParser()
 
+### Rough test cases
+
 # print(chain.invoke({
 #     "passage": "Praesente (bis) et Claudiano consulibus, sexto decimo kalendas Augustas, Carthagine in secretario impositis, Sperato, Nartzalo ... Saturninus proconsul dixit: 'Potestis indulgentiam domini nostri Imperatoris promereri, si ad bonam mentem redeatis.'"
 # }))

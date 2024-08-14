@@ -1,5 +1,5 @@
 from evaluations.base_graph_evaluation import BaseGraphEvaluation
-from app.graphs.graphs import get_generate_question_graph, get_generate_question_prompts
+from src.graphs.graphs import get_generate_question_graph, get_generate_question_prompts
 
 class GenerateQuestionGraphEvaluation(BaseGraphEvaluation):
     name = "GenerateQuestionGraphEvaluation"

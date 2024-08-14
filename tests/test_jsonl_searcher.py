@@ -2,7 +2,7 @@ import pytest
 import os
 import json
 import pickle
-from app.jsonl_searcher import JSONLIndexer, JSONLSearcher, remove_diacritics
+from src.jsonl_searcher import JSONLIndexer, JSONLSearcher, remove_diacritics
 
 '''
 TODO: Randomly select 10 or so words from the JSONL file and write tests to check if the search method returns the correct results for those words.

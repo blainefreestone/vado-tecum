@@ -1,5 +1,5 @@
 import pytest
-from app.text import Text
+from src.text import Text
 
 @pytest.fixture
 def text():

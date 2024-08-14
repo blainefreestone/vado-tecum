@@ -1,7 +1,6 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import PromptTemplate
-from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.prompts import  ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 
 prompt = ChatPromptTemplate.from_messages(
@@ -16,7 +15,7 @@ prompt = ChatPromptTemplate.from_messages(
             )
         ),
         MessagesPlaceholder(variable_name="messages"),
-        # ("user", "{user_input}")
+        HumanMessagePromptTemplate.from_template("{input}"),
     ]
 )
 
@@ -25,6 +24,8 @@ chain = (
     | ChatOpenAI(model="gpt-4o-mini", temperature=0)
     | StrOutputParser()
 )
+
+### Rough test cases
 
 # print(chain.invoke({
 #     "messages": [
