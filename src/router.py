@@ -9,9 +9,10 @@ prompt = ChatPromptTemplate.from_messages(
             content=(
                 "Given the conversation below, choose the next worker to continue the conversation."
                 " Choose from the following workers:\n"
-                "explain_word_or_phrase - Explain the meaning of a word or phrase if the student asks.\n"
-                "generate_question - Generate a question to test the students understanding when the indicate they are ready.\n"
-                " Do not respond with more than one word."
+                "'explain_word_or_phrase' - Explain the meaning of a word or phrase if the student asks.\n"
+                "'generate_question' - Generate a question to test the students understanding when the indicate they are ready.\n"
+                "'evaluate_response' - Grade the student's response to the question and offer feedback if needed. This should happen every time a student provides a new response, even if previous responses have already been evaluated.\n"
+                " Do not respond with more than one word. Only provide the worker name. Nothing else."
             )
         ),
         MessagesPlaceholder(variable_name="messages"),
