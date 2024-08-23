@@ -7,14 +7,21 @@ from langchain_core.runnables import RunnableLambda
 
 def route(info):
     if info["worker"] == "generate_question":
-        return generate_question_chain.invoke({
+        question =  generate_question_chain.invoke({
             "passage": info["passage"]
         })
+        return {
+            "question": question,
+            "response": question
+        }
     elif info["worker"] == "explain_word_or_phrase":
-        return explain_word_or_phrase_agent_executor.invoke({
+        explanation = explain_word_or_phrase_agent_executor.invoke({
             "passage": info["passage"],
             "input": info["input"]
         })["output"]
+        return {
+            "response": explanation
+        }
     elif info["worker"] == "evaluate_response":
         correctness = evaluate_correctness_chain.invoke({
             "passage": info["passage"],
@@ -29,22 +36,27 @@ def route(info):
             })
 
             if fluency.fluent is True:
-                return "Recte respondisti!"
+                return {
+                    "response": "Recte respondisti!"
+                }
             else:
-                return fluency.explanation
+                return {
+                    "response": fluency.explanation
+                }
         else:
-            return correctness.explanation
-
+            return {
+                "response": correctness.explanation
+            }
     else:
         return
 
-full_chain = {"worker": router_chain, "input": lambda x: x["input"], "messages": lambda x: x["messages"], "passage": lambda x: x["passage"], "question": lambda x: x["question"]} | RunnableLambda(route)
+full_chain = {"worker": router_chain, "input": lambda x: x.get("input"), "messages": lambda x: x.get("messages"), "passage": lambda x: x.get("passage"), "question": lambda x: x.get("question")} | RunnableLambda(route)
 
 ### Rough test cases
 
 # user_input = "Quid significat 'consulibus'?"
 # user_input = "paratus sum"
-# user_input = "Cives ad bonam mentem redire debent ut indulgentiam domini Imperatoris promerentur."
+# # user_input = "Cives ad bonam mentem redire debent ut indulgentiam domini Imperatoris promerentur."
 # user_input = "Cives ad Carthaginem ire debebant."
 # user_input = "They need to return to a sound mind."
 
